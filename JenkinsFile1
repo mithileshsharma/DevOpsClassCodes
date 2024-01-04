@@ -12,7 +12,7 @@ pipeline {
         stage('stage1:Checkout the code from github') {
             steps {
                echo "our version control ssytem is ${VCS}"
-               git url:"https://github.com/mithileshsharma/cicdakshat"
+               git url:"https://github.com/mithileshsharma/DevOpsClassCodes"
             }
         }
         stage("compile the code"){

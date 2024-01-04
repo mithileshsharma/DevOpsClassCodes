@@ -1,37 +1,43 @@
-pipeline{
-	agent any
-	// tools{
-	// 	maven "test-maven"
-	// }
-      stages{
-           stage('Checkout'){
-	    
-               steps{
-		 echo 'cloning..'
-                 git 'https://github.com/akshu20791/DevOpsClassCodes.git'
-              }
-          }
-          stage('Compile'){
-             
-              steps{
-                  echo 'compiling..'
-                  sh 'mvn compile'
-	      }
-          }
-          
-          stage('Package'){
-		  
-              steps{
-		  
-                  sh 'mvn package'
-              }
-          }
-	     stage('deploy'){
-    steps{
-        sh 'sudo cp -f /var/lib/jenkins/workspace/project/target/*.war /opt/tomcat/apache-tomcat-8.5.93/webapps/'
+pipeline {
+    agent any
+    environment{
+        VCS="git"
+        FNAME="mithilesh"
+        compilegoal="compile"
+        testinggoal="test"
+        qagoal="checkstyle:checkstyle"
+        packagegoal="package"
     }
-}
-
-          
-      }
+    stages {
+        stage('stage1:Checkout the code from github') {
+            steps {
+               echo "our version control ssytem is ${VCS}"
+               git url:"https://github.com/mithileshsharma/cicdakshat"
+            }
+        }
+        stage("compile the code"){
+            steps{
+                sh "mvn ${compilegoal}"
+            }
+        }
+        stage("test the functionality"){
+            steps{
+                sh "mvn ${testinggoal}"
+            }
+        }
+        stage("quality assurance of the code"){
+            steps{
+                sh "mvn ${qagoal}"
+                echo "Generating the reports"
+                recordIssues(tools: [checkStyle()])
+            }
+        }
+        stage("Package the code"){
+            steps{
+                sh "mvn ${packagegoal}"
+            }
+        }
+        
+        
+    }
 }

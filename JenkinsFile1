@@ -8,6 +8,7 @@ pipeline {
         qagoal="checkstyle:checkstyle"
         packagegoal="package"
     }
+
     stages {
         stage('stage1:Checkout the code from github') {
             steps {
